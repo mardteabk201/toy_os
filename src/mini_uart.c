@@ -2,13 +2,10 @@
 #include "peripherals/mini_uart.h"
 #include "peripherals/gpio.h"
 
+#define UART_BASE    0x09000000
 void uart_send(char c)
 {
-	while (1) {
-		if (get32(AUX_MU_LSR_REG) & 0x20)
-			break;
-	}
-	put32(AUX_MU_IO_REG, c);
+	*((unsigned int *)UART_BASE) = c;
 }
 
 char uart_recv(void)
@@ -18,13 +15,6 @@ char uart_recv(void)
 			break;
 	}
 	return (get32(AUX_MU_IO_REG) & 0xFF);
-}
-
-#define UART_BASE    0x09000000
-void uart_send_string(char* str)
-{
-	while (*str)
-		*((unsigned int *)UART_BASE) = *str++;
 }
 
 void uart_init(void)
@@ -42,4 +32,9 @@ void uart_init(void)
 	str	w5, [x4, #0x30]
 	*/
 	*(unsigned int *)0x09000030 = 0xc301;
+}
+
+void putc(void *p, char c)
+{
+	uart_send(c);
 }
