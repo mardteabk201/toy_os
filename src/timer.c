@@ -37,10 +37,10 @@ void timer_init(void)
 
 void timer_next(void)
 {
-	disable_cntv();
+	//disable_cntv();
 	gicd_clear_pending(TIMER_IRQ);
 	set_next_event();
-	enable_cntv();
+	//enable_cntv();
 }
 
 void handle_timer_irq(void)
