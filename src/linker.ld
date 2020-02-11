@@ -1,9 +1,9 @@
 
-STACKTOP = 0x51000000;
+STACKTOP = 0x50000000;
 
 SECTIONS
 {
-	. = 0x40010000;
+	. = 0x40000000;
 	.text : { *(.text) }
 	.text.hell : { *(.text.hell) }
 	.rodata : { *(.rodata) }

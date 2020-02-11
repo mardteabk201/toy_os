@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "sched.h"
 #include "printf.h"
 #include "peripherals/timer.h"
 #include <stdint.h>
@@ -13,7 +14,7 @@ uint32_t cntfrq;
 void get_cnt_freq()
 {
 	cntfrq = raw_read_cntfrq_el0();
-	printf("cntfrq: %d\n", cntfrq);
+	//printf("cntfrq: %d\n", cntfrq);
 }
 
 void set_next_event()
@@ -21,10 +22,10 @@ void set_next_event()
 	uint64_t current_cnt;
 
 	current_cnt = raw_read_cntvct_el0();
-	printf("current_cnt: %d\n", current_cnt);
+	//printf("current_cnt: %d\n", current_cnt);
 	raw_write_cntv_cval_el0(current_cnt + cntfrq);
-	printf("rewrite: %d\n", current_cnt + cntfrq);
-	printf("read: %d\n", raw_read_cntv_cval_el0());
+	//printf("rewrite: %d\n", current_cnt + cntfrq);
+	//printf("read: %d\n", raw_read_cntv_cval_el0());
 }
 
 void timer_init(void)
@@ -45,6 +46,6 @@ void timer_next(void)
 
 void handle_timer_irq(void)
 {
-	printf("Timer interrupt received\n\r");
 	timer_next();
+	timer_tick();
 }
