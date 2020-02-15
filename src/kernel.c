@@ -62,6 +62,8 @@ void kernel_process()
 	int err = move_to_user_mode((unsigned long)&user_process);
 	if (err < 0)
 	    printf("Error while moving process to user mode\n\r");
+
+	/* 这个执行完会到哪里去？哪里来的回哪里去 */
 }
 
 void kernel_main(void)
