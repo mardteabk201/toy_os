@@ -185,10 +185,10 @@ void gic_v3_initialize(void)
 
 	init_gicd();
 	init_gicc();
-	gicd_config(TIMER_IRQ, GIC_GICD_ICFGR_EDGE);
+	gicd_config(TIMER_IRQ, GIC_GICD_ICFGR_EDGE); /* No Need */
 	gicd_set_priority(TIMER_IRQ, 0 << GIC_PRI_SHIFT);   /* Set priority */
-	gicd_set_target(TIMER_IRQ, 0x1);  /* processor 0 */
-	gicd_clear_pending(TIMER_IRQ);
+	gicd_set_target(TIMER_IRQ, 0x1);  /* processor 0 */  /* No need */
+	gicd_clear_pending(TIMER_IRQ); /* No need */
 	gicd_enable_int(TIMER_IRQ);
 }
 
