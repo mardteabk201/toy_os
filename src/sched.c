@@ -80,6 +80,7 @@ void switch_to(struct task_struct * next, int index)
 
 void schedule_tail(void)
 {
+	/* 进程在主动调度后处于关闭抢占的状态，如果这里不开启，便再也不调度了 */
 	preempt_enable();
 }
 
