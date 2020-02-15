@@ -1,6 +1,9 @@
 #include "sched.h"
 #include "irq.h"
 #include "printf.h"
+#include "fork.h"
+#include "utils.h"
+#include "mm.h"
 
 static struct task_struct init_task = INIT_TASK;
 struct task_struct *current = &(init_task);
@@ -46,7 +49,7 @@ void _schedule(void)
 		}
 	}
 
-	switch_to(task[next]);
+	switch_to(task[next], next);
 	d = *(char *)(current->cpu_context.x20);
 	if ('a' <= d && d <= 'e')
 		printf("Out timer tick %s\n", (char *)(current->cpu_context.x20));
@@ -61,7 +64,7 @@ void schedule(void)
 	_schedule();
 }
 
-void switch_to(struct task_struct * next)
+void switch_to(struct task_struct * next, int index)
 {
 	struct task_struct *prev;
 
@@ -83,7 +86,8 @@ void schedule_tail(void)
 void timer_tick()
 {
 	printf("\ntimer tick\n");
-	printf("In  timer tick %s", (char *)(current->cpu_context.x20));
+	//printf("In  timer tick %s", (char *)(current->cpu_context.x20));
+	printf("In  timer tick scheduler\n");
 
 	current->counter--;
 
@@ -105,4 +109,20 @@ void timer_tick()
 	/* 就像一个特工一样，换好衣服他就出去了，出去的第一件事就是，关中断 */
 	/* 因为你至少得让他运行一会儿，不能立马又来下一个中断 */
 	disable_irq();
+}
+
+void exit_process()
+{
+	preempt_disable();
+	for (int i = 0; i < NR_TASKS; i++) {
+		if (task[i] == current) {
+			task[i]->state = TASK_ZOMBIE;
+			break;
+		}
+	}
+	if (current->stack) {
+		free_page(current->stack);
+	}
+	preempt_enable();
+	schedule();
 }

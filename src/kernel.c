@@ -6,15 +6,62 @@
 #include "gic_v3.h"
 #include "fork.h"
 #include "sched.h"
+#include "sys.h"
 
-void process(char *array)
+void user_process1(char *array)
 {
+	char buf[2] = {0};
+
 	while (1) {
 		for (int i = 0; i < 5; i++) {
-			printf("%c.", array[0]);
+			buf[0] = array[i];
+			call_sys_write(buf);
 			delay(40000000);
 		}
 	}
+}
+
+void user_process()
+{
+	char buf[30] = {0};
+
+	tfp_sprintf(buf, "User process started\n\r");
+	call_sys_write(buf);
+
+	unsigned long stack = call_sys_malloc();
+	if (stack < 0) {
+		printf("Error while allocating stack for process 1\n\r");
+		return;
+	}
+
+	int err = call_sys_clone((unsigned long)&user_process1, (unsigned long)"aaaaa", stack);
+	if (err < 0) {
+		printf("Error while clonning process 1\n\r");
+		return;
+	}
+
+	stack = call_sys_malloc();
+	if (stack < 0) {
+		printf("Error while allocating stack for process 1\n\r");
+		return;
+	}
+
+	err = call_sys_clone((unsigned long)&user_process1, (unsigned long)"bbbbb", stack);
+	if (err < 0) {
+		printf("Error while clonning process 2\n\r");
+		return;
+	}
+
+	call_sys_exit();
+}
+
+void kernel_process()
+{
+	printf("Kernel process started. EL %d\r\n", get_el());
+
+	int err = move_to_user_mode((unsigned long)&user_process);
+	if (err < 0)
+	    printf("Error while moving process to user mode\n\r");
 }
 
 void kernel_main(void)
@@ -28,11 +75,7 @@ void kernel_main(void)
 	timer_init();
 	enable_irq();
 
-	copy_process((unsigned long)&process, (unsigned long)"aaaaa");
-	copy_process((unsigned long)&process, (unsigned long)"bbbbb");
-	copy_process((unsigned long)&process, (unsigned long)"ccccc");
-	copy_process((unsigned long)&process, (unsigned long)"ddddd");
-	copy_process((unsigned long)&process, (unsigned long)"eeeee");
+	copy_process(PF_KTHREAD, (unsigned long)&kernel_process, 0, 0);
 
 	while (1)
 		schedule();
