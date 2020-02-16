@@ -49,7 +49,7 @@ void _schedule(void)
 		}
 	}
 
-	switch_to(task[next], next);
+	switch_to(task[next]);
 	d = *(char *)(current->cpu_context.x20);
 	if ('a' <= d && d <= 'e')
 		printf("Out timer tick %s\n", (char *)(current->cpu_context.x20));
@@ -64,7 +64,7 @@ void schedule(void)
 	_schedule();
 }
 
-void switch_to(struct task_struct * next, int index)
+void switch_to(struct task_struct * next)
 {
 	struct task_struct *prev;
 
@@ -73,6 +73,8 @@ void switch_to(struct task_struct * next, int index)
 
 	prev = current;
 	current = next;
+
+	set_pgd(next->mm.pgd);
 
 	/* This will be the return entry */
 	cpu_switch_to(prev, next);
@@ -120,9 +122,6 @@ void exit_process()
 			task[i]->state = TASK_ZOMBIE;
 			break;
 		}
-	}
-	if (current->stack) {
-		free_page(current->stack);
 	}
 	preempt_enable();
 	schedule();

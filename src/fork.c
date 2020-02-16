@@ -5,7 +5,7 @@
 #include "entry.h"
 #include "utils.h"
 
-int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg, unsigned long stack)
+int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg)
 {
 	struct task_struct *p;
 	int pid;
@@ -13,13 +13,8 @@ int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg,
 
 	preempt_disable();
 
-	p = (struct task_struct *)get_free_page();
-	if (!p)
-		return 1;
-
+	p = (struct task_struct *)allocate_kernel_page();;
 	childregs = task_pt_regs(p);
-	memzero((unsigned long)childregs, sizeof(struct pt_regs));
-	memzero((unsigned long)&p->cpu_context, sizeof(struct cpu_context));
 
 	if (clone_flags & PF_KTHREAD) {
 		p->cpu_context.x19 = fn;
@@ -28,8 +23,7 @@ int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg,
 		cur_regs = task_pt_regs(current);
 		*childregs = *cur_regs;
 		childregs->regs[0] = 0;
-		childregs->sp = stack + PAGE_SIZE;
-		p->stack = stack;
+		copy_virt_memory(p);
 	}
 
 	p->flags = clone_flags;
@@ -54,23 +48,18 @@ int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg,
 /* 所以，pt_regs就是0x50000ef0，然后填充好pt_regs */
 /* 到时候直接执行ret_to_usr里的kernel_exit */
 /* 就可以配置好，sp_el0和esr_el1 */
-int move_to_user_mode(unsigned long pc)
+int move_to_user_mode(unsigned long start, unsigned long size, unsigned long pc)
 {
-	struct pt_regs *regs;
-	unsigned long stack;
+	struct pt_regs *regs = task_pt_regs(current);
 
-	regs = task_pt_regs(current);
-
-	memzero((unsigned long)regs, sizeof(*regs));
-	regs->pc = pc;
 	regs->pstate = PSR_MODE_EL0t;
+	regs->pc = pc;
+	regs->sp = 2 * PAGE_SIZE;
 
-	stack = get_free_page(); //allocate new user stack
-	if (!stack)
-		return -1;
+	unsigned long code_page = allocate_user_page(current, 0);
 
-	regs->sp = stack + PAGE_SIZE;
-	current->stack = stack;
+	memcpy(code_page, start, size);
+	set_pgd(current->mm.pgd);
 
 	return 0;
 }

@@ -133,11 +133,13 @@ error_invalid_el1h:
 
 el0_sync:
 	kernel_entry 0
-	mrs	x25, esr_el1
-	lsr	x24, x25, #ESR_ELx_EC_SHIFT
-	cmp	x24, #ESR_ELx_EC_SVC64
+	mrs	x25, esr_el1					// read the syndrome register
+	lsr	x24, x25, #ESR_ELx_EC_SHIFT		// exception class
+	cmp	x24, #ESR_ELx_EC_SVC64			// SVC in 64-bit state
 	b.eq	el0_svc
-	handle_invalid_entry  0, SYNC_ERROR
+	cmp	x24, #ESR_ELx_EC_DABT_LOW		// data abort in EL0
+	b.eq	el0_da
+	handle_invalid_entry 0, SYNC_ERROR
 
 el0_irq:
 	kernel_entry 0
@@ -184,6 +186,18 @@ ni_sys:
 ret_from_syscall:
 	bl	disable_irq
 	str	x0, [sp, #S_X0]				// returned x0
+	kernel_exit 0
+
+el0_da:
+	bl	enable_irq
+	mrs	x0, far_el1
+	mrs	x1, esr_el1			
+	bl	do_mem_abort
+	cmp x0, 0
+	b.eq 1f
+	handle_invalid_entry 0, DATA_ABORT_ERROR
+1:
+	bl disable_irq				
 	kernel_exit 0
 
 .globl ret_from_fork
