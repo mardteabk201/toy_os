@@ -17,14 +17,36 @@ master:
 	ldr x0, =SCTLR_VALUE_MMU_DISABLED
 	msr sctlr_el1, x0
 
-	#ldr x0, =HCR_VALUE
-	#msr hcr_el2, x0
+	mrs	x0, CurrentEL
+	lsr	x0, x0, #2
+	cmp x0, #3
+	beq	el3
+	cmp x0, #2
+	beq	el2
+	cmp x0, #1
+	b el1_entry
 
-	#ldr x0, =SCR_VALUE
-	#msr scr_el3, x0
+el2:
+	ldr	x0, =HCR_VALUE
+	msr	hcr_el2, x0
 
-	#adr x0, el1_entry
-	#msr elr_el3, x0
+	mov	x0, #SPSR_VALUE
+	msr	spsr_el2, x0
+
+	adr x0, el1_entry
+	msr	elr_el2, x0
+	eret
+
+el3:
+	ldr x0, =HCR_VALUE
+	msr scr_el3, x0
+
+	ldr x0, =SCR_VALUE
+	msr scr_el3, x0
+
+	adr x0, el1_entry
+	msr elr_el3, x0
+	eret
 
 el1_entry:
 	adr	x0, bss_begin
