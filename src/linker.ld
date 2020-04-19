@@ -21,8 +21,6 @@ SECTIONS
 	bss_end = .;
 	. = ALIGN(0x00001000);
 	pg_dir = .;
-	. = ALIGN(0x00001000);
-	pg_dir = .;
 	.data.pgd : { . += (3 * (1 << 12)); }
 
 	. = STACKTOP;

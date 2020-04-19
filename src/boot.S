@@ -88,7 +88,7 @@ el1_entry:
 	and	\tmp1, \tmp1, #PTRS_PER_TABLE - 1			// table index
 	add	\tmp2, \tbl, #PAGE_SIZE
 	orr	\tmp2, \tmp2, #MM_TYPE_PAGE_TABLE	
-	str	\tmp2, [\tbl, \tmp1, lsl #3]
+	str	\tmp2, [\tbl, \tmp1, lsl #3] /* 将pud的地址填入pgd的那个spot中 */
 	add	\tbl, \tbl, #PAGE_SIZE					// next level table page
 	.endm
 
@@ -100,11 +100,12 @@ el1_entry:
 	lsr	\phys, \phys, #SECTION_SHIFT
 	mov	\tmp1, #\flags
 	orr	\phys, \tmp1, \phys, lsl #SECTION_SHIFT			// table entry
-9999:	str	\phys, [\tbl, \start, lsl #3]				// store the entry
+1:
+	str	\phys, [\tbl, \start, lsl #3]				// store the entry
 	add	\start, \start, #1					// next entry
 	add	\phys, \phys, #SECTION_SIZE				// next block
 	cmp	\start, \end
-	b.ls	9999b
+	b.ls	1b
 	.endm
 
 __create_page_tables:
@@ -114,21 +115,22 @@ __create_page_tables:
 	mov	x1, #PG_DIR_SIZE
 	bl 	memzero
 
+running:
 	adrp	x0, pg_dir
 	mov	x1, #VA_START 
 	create_pgd_entry x0, x1, x2, x3
 
 	/* Mapping kernel and init stack*/
-	mov 	x1, xzr							// start mapping from physical offset 0
-	mov 	x2, #VA_START						// first virtual address
-	ldr	x3, =(VA_START + LOW_MEMORY - SECTION_SIZE)		// last virtual address
+	mov 	x1, xzr		// start mapping from physical offset 0
+	mov 	x2, #VA_START		// first virtual address
+	ldr	x3, =(VA_START + LOW_MEMORY - SECTION_SIZE)	// last virtual address
 	create_block_map x0, x1, x2, x3, MMU_FLAGS, x4
 
 	/* Mapping device memory*/
-	mov 	x1, #LOW_MEMORY					// start mapping from device base address 
-	ldr 	x2, =(VA_START + LOW_MEMORY)				// first virtual address
-	ldr	x3, =(VA_START + PHYS_MEMORY_SIZE - SECTION_SIZE)	// last virtual address
+	mov 	x1, #LOW_MEMORY		// start mapping from device base address 
+	ldr 	x2, =(VA_START + LOW_MEMORY) // first virtual address
+	ldr	x3, =(VA_START + PHYS_MEMORY_SIZE - SECTION_SIZE)//last virtual address
 	create_block_map x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
-	mov	x30, x29						// restore return address
+	mov	x30, x29		// restore return address
 	ret
