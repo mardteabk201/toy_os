@@ -5,6 +5,7 @@
 -m 4096 \
 -nographic -serial mon:stdio \
 -kernel build/kernel8.elf \
+-device loader,file=build/kernel8.bin,addr=0x60000000 \
 -s -S \
 
-#-device loader,file=build/kernel8.bin,addr=0x40000000
+#-gdb 1235
