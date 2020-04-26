@@ -1,5 +1,5 @@
 
-STACKTOP = 0xffff000010000000;
+STACKTOP = 0xffff000020000000;
 
 SECTIONS
 {
@@ -21,6 +21,8 @@ SECTIONS
 	bss_end = .;
 	. = ALIGN(0x00001000);
 	pg_dir = .;
+	.data.pgd : { . += (3 * (1 << 12)); }
+	idmap_pg_dir = .;
 	.data.pgd : { . += (3 * (1 << 12)); }
 
 	. = STACKTOP;
