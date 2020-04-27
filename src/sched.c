@@ -126,3 +126,25 @@ void exit_process()
 	preempt_enable();
 	schedule();
 }
+
+/*
+所以进程调度的流程是怎样的？分为2个部分：
+a. 启动阶段
+进程1运行，然后被timer调度
+进入schedule，选中进程2
+进程2直接从ret_from_fork开始运行，然后被timer调度
+进入schedule，选中进程3
+进程3直接从ret_from_fork开始运行，然后被timer调度
+进入schedule，选中进程1
+进程1退出schedule函数，进入entry.S的kernel_exit
+再退出timer中断，回到它被打断的地方，再运行进程1自己的程序
+
+b. 调度阶段
+timer中断，进程3被选中
+退出schedule函数，进入entry.S的kernel_exit
+再退出timer中断，回到它被打断的地方，再运行进程1自己的程序
+最关键的就是抓住2个退出点
+	从sched.S里退出，是回到call switch_to_cpu的地方；这就肯定进入了entry.S，timer中断嘛
+	从entry.S的kernel_exit中退出，就回到了它被打断的地方
+最后就可以运行自己的程序了
+*/
