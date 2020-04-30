@@ -117,16 +117,17 @@ __create_page_tables:
 	mov	x1, #PG_DIR_SIZE
 	bl 	memzero
 
+	/* Mapping kernel identically */
 	adrp	x0, idmap_pg_dir
 	ldr	x1, =(0x60000000)
 	create_pgd_entry x0, x1, x2, x3
 
-	/* Mapping kernel and init stack*/
 	ldr	x1, =(0x60000000)
 	ldr	x2, =(0x60000000)		// first virtual address
 	ldr	x3, =(0x60000000 + 0x1fffffff)	// last virtual address /* 1GB 0x4000 0000 ~ 0x7fff ffff*/
 	create_block_map x0, x1, x2, x3, MMU_FLAGS, x4
 
+	/* Mapping kernel */
 	adrp	x0, pg_dir
 	mov	x1, #PG_DIR_SIZE
 	bl 	memzero
@@ -135,21 +136,20 @@ __create_page_tables:
 	mov	x1, #VA_START 
 	create_pgd_entry x0, x1, x2, x3
 
-	/* Mapping kernel and init stack*/
 	ldr	x1, =(0x60000000)
 	mov 	x2, #VA_START		// first virtual address
 	ldr	x3, =(VA_START + 0x1fffffff)	// last virtual address /* 1GB 0x4000 0000 ~ 0x7fff ffff*/
 	create_block_map x0, x1, x2, x3, MMU_FLAGS, x4
 
+	/* Mapping io*/
 	adrp	x0, pg_dir
 	ldr	x1, =(VA_START + 0x29000000)
 	create_pgd_entry x0, x1, x2, x3
 
-	/* Mapping kernel and init stack*/
 	ldr	x1, =(0x09000000)
 	ldr	x2, =(VA_START + 0x29000000)
 	ldr	x3, =(VA_START + 0x29200000 - 1)
-	create_block_map x0, x1, x2, x3, MMU_FLAGS, x4
+	create_block_map x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
 	mov	x30, x29		// restore return address
 	ret
