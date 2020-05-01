@@ -2,7 +2,7 @@
 #include "user.h"
 #include "printf.h"
 
-void loop(char* str)
+__attribute__((section(".text.user"))) void loop(char* str)
 {
 	char buf[2] = {""};
 	while (1) {
@@ -14,7 +14,7 @@ void loop(char* str)
 	}
 }
 
-void user_process()
+__attribute__((section(".text.user"))) void user_process()
 {
 	call_sys_write("User process\n\r");
 	int pid = call_sys_fork();
