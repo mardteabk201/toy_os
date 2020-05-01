@@ -13,11 +13,11 @@
 #define PAGE_SIZE   			(1 << PAGE_SHIFT)
 #define SECTION_SIZE			(1 << SECTION_SHIFT)
 
-#define LOW_MEMORY              0x20000000
-#define HIGH_MEMORY				0x60000000
+#define PA_START                0x60000000
+#define LOW_MEMORY              0x70000000
+#define HIGH_MEMORY             0x80000000
 
 #define PTRS_PER_TABLE			(1 << TABLE_SHIFT)
-#define HELL			0xfff
 
 #define PGD_SHIFT				PAGE_SHIFT + 3 * TABLE_SHIFT
 #define PUD_SHIFT				PAGE_SHIFT + 2 * TABLE_SHIFT

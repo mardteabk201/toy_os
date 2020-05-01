@@ -4,7 +4,7 @@
 /*
  * GIC on QEMU Virt
  */
-#define QEMU_VIRT_GIC_BASE			(0x08000000)
+#define QEMU_VIRT_GIC_BASE			(0xffff000028000000)
 #define QEMU_VIRT_GIC_INT_MAX		(64)
 #define QEMU_VIRT_GIC_PRIO_MAX		(16)
 /* SGI: Interrupt IDs 0-15 */

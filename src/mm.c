@@ -3,6 +3,7 @@
 #include "arm/mmu.h"
 
 static unsigned short mem_map[PAGING_PAGES] = {0,};
+static long va_pa_offset = VA_START - PA_START;
 
 unsigned long allocate_kernel_page()
 {
@@ -10,7 +11,7 @@ unsigned long allocate_kernel_page()
 	if (page == 0) {
 		return 0;
 	}
-	return page + VA_START;
+	return page + va_pa_offset;
 }
 
 unsigned long allocate_user_page(struct task_struct *task, unsigned long va)
@@ -20,7 +21,7 @@ unsigned long allocate_user_page(struct task_struct *task, unsigned long va)
 		return 0;
 	}
 	map_page(task, va, page);
-	return page + VA_START;
+	return page + va_pa_offset;
 }
 
 unsigned long get_free_page()
@@ -29,7 +30,7 @@ unsigned long get_free_page()
 		if (mem_map[i] == 0) {
 			mem_map[i] = 1;
 			unsigned long page = LOW_MEMORY + i * PAGE_SIZE;
-			memzero(page + VA_START, PAGE_SIZE);
+			memzero(page + va_pa_offset, PAGE_SIZE);
 			return page;
 		}
 	}
@@ -74,19 +75,19 @@ void map_page(struct task_struct *task, unsigned long va, unsigned long page)
 	}
 	pgd = task->mm.pgd;
 	int new_table;
-	unsigned long pud = map_table((unsigned long *)(pgd + VA_START), PGD_SHIFT, va, &new_table);
+	unsigned long pud = map_table((unsigned long *)(pgd + va_pa_offset), PGD_SHIFT, va, &new_table);
 	if (new_table) {
 		task->mm.kernel_pages[++task->mm.kernel_pages_count] = pud;
 	}
-	unsigned long pmd = map_table((unsigned long *)(pud + VA_START) , PUD_SHIFT, va, &new_table);
+	unsigned long pmd = map_table((unsigned long *)(pud + va_pa_offset) , PUD_SHIFT, va, &new_table);
 	if (new_table) {
 		task->mm.kernel_pages[++task->mm.kernel_pages_count] = pmd;
 	}
-	unsigned long pte = map_table((unsigned long *)(pmd + VA_START), PMD_SHIFT, va, &new_table);
+	unsigned long pte = map_table((unsigned long *)(pmd + va_pa_offset), PMD_SHIFT, va, &new_table);
 	if (new_table) {
 		task->mm.kernel_pages[++task->mm.kernel_pages_count] = pte;
 	}
-	map_table_entry((unsigned long *)(pte + VA_START), va, page);
+	map_table_entry((unsigned long *)(pte + va_pa_offset), va, page);
 	struct user_page p = {page, va};
 	task->mm.user_pages[task->mm.user_pages_count++] = p;
 }
