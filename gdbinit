@@ -7,6 +7,6 @@ hb *0x600000c0
 c
 si
 file build/kernel8.elf
-hb schedule
+hb kernel_process
 disp /i $pc
 c

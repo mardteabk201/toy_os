@@ -13,7 +13,7 @@ int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg)
 
 	preempt_disable();
 
-	p = (struct task_struct *)allocate_kernel_page();;
+	p = (struct task_struct *)allocate_kernel_page();
 	childregs = task_pt_regs(p);
 
 	if (clone_flags & PF_KTHREAD) {
