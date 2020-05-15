@@ -32,9 +32,9 @@ struct cpu_context {
 	unsigned long x26;
 	unsigned long x27;
 	unsigned long x28;
-	unsigned long fp;
+	unsigned long fp; //x29
 	unsigned long sp;
-	unsigned long pc;
+	unsigned long pc; //x30 == lr
 };
 
 #define MAX_PROCESS_PAGES			16

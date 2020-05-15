@@ -118,16 +118,20 @@ __create_page_tables:
 	bl 	memzero
 
 	/* Mapping kernel identically */
+	//0x60000000 ---> 0x60000000
+	//0x80000000 ---> 0x80000000
 	adrp	x0, idmap_pg_dir
 	ldr	x1, =(PA_START)
 	create_pgd_entry x0, x1, x2, x3
 
 	ldr	x1, =(PA_START)
-	ldr	x2, =(PA_START)		// first virtual address
-	ldr	x3, =(PA_START + 0x20000000 - 1)	// last virtual address /* 1GB 0x4000 0000 ~ 0x7fff ffff*/
+	ldr	x2, =(PA_START)
+	ldr	x3, =(PA_START + 0x20000000 - 1)
 	create_block_map x0, x1, x2, x3, MMU_FLAGS, x4
 
 	/* Mapping kernel */
+	//0x60000000 ---> 0xffff000000000000
+	//0x80000000 ---> 0xffff000000200000
 	adrp	x0, pg_dir
 	mov	x1, #PG_DIR_SIZE
 	bl 	memzero
@@ -137,17 +141,19 @@ __create_page_tables:
 	create_pgd_entry x0, x1, x2, x3
 
 	ldr	x1, =(PA_START)
-	mov 	x2, #VA_START		// first virtual address
-	ldr	x3, =(VA_START + 0x20000000 - 1)	// last virtual address /* 1GB 0x4000 0000 ~ 0x7fff ffff*/
+	mov 	x2, #VA_START
+	ldr	x3, =(VA_START + 0x20000000 - 1)
 	create_block_map x0, x1, x2, x3, MMU_FLAGS, x4
 
 	/* Mapping io */
+	//0x08000000 ---> 0xffff000028000000
+	//0x0a000000 ---> 0xffff00002a000000
 	adrp	x0, pg_dir
 	ldr	x1, =(VA_START + 0x28000000)
 	create_pgd_entry x0, x1, x2, x3
 
 	ldr	x1, =(0x08000000)
-	ldr	x2, =(VA_START + 0x28000000)  /* 0x08000000 ---> 0xffff000028000000 */
+	ldr	x2, =(VA_START + 0x28000000)
 	ldr	x3, =(VA_START + 0x2a000000 - 1)
 	create_block_map x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
