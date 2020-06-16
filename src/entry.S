@@ -57,8 +57,8 @@
 	msr	sp_el0, x21
 	.endif
 
-	msr elr_el1, x22
-	msr spsr_el1, x23
+	msr elr_el1, x22   //pt_regs->pc
+	msr spsr_el1, x23  //pt_regs->pstate
 
 	ldp	x0, x1, [sp, #16 * 0]
 	ldp	x2, x3, [sp, #16 * 1]

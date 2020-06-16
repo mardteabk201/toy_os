@@ -24,7 +24,6 @@ void _schedule(void)
 {
 	int next, c;
 	struct task_struct * p;
-	char d;
 
 	preempt_disable();
 
@@ -50,11 +49,6 @@ void _schedule(void)
 	}
 
 	switch_to(task[next]);
-	d = *(char *)(current->cpu_context.x20);
-	if ('a' <= d && d <= 'e')
-		printf("Out timer tick %s\n", (char *)(current->cpu_context.x20));
-	else
-		printf("Out timer tick scheduler, gonna schedule away\n");
 	preempt_enable();
 }
 
