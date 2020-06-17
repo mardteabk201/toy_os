@@ -35,6 +35,7 @@ int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg)
 	p->cpu_context.pc = (unsigned long)ret_from_fork;
 	p->cpu_context.sp = (unsigned long)childregs;
 	pid = nr_tasks++;
+	p->pid = pid;
 	task[pid] = p;
 
 	preempt_enable();

@@ -106,6 +106,7 @@ void timer_tick()
 	/* 就像一个特工一样，换好衣服他就出去了，出去的第一件事就是，关中断 */
 	/* 因为你至少得让他运行一会儿，不能立马又来下一个中断 */
 	disable_irq();
+	printf("change to process id: %d\n", current->pid);
 }
 
 void exit_process()
