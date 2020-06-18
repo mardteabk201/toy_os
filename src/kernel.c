@@ -42,7 +42,7 @@ void temporary_process()
 	unsigned long end = (unsigned long)&user_end;
 	unsigned long process = (unsigned long)&user_process;
 
-	printf("Kernel process started. EL %d\r\n", get_el());
+	printf("Kernel process started. EL %d\r\n", get_current_el());
 
 	move_to_user_mode(begin, end - begin, process - begin); //Default user code starts from 0x0
 	/* 这个执行完会到哪里去？哪里来的回哪里去 */
@@ -50,7 +50,6 @@ void temporary_process()
 
 void kernel_main(void)
 {
-	//uart_init();
 	init_printf(NULL, putc);
 	printf("Hell we come!\n");
 

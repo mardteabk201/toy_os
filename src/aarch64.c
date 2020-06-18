@@ -52,19 +52,9 @@ void enable_irq(void)
 	__asm__ __volatile__("msr DAIFClr, %0\n\t" : : "i"(DAIF_IRQ_BIT)  : "memory");
 }
 
-void enable_fiq(void)
-{
-	__asm__ __volatile__("msr DAIFClr, %0\n\t" : : "i"(DAIF_FIQ_BIT)  : "memory");
-}
-
 void disable_irq(void)
 {
 	__asm__ __volatile__("msr DAIFSet, %0\n\t" : : "i"(DAIF_IRQ_BIT)  : "memory");
-}
-
-void disable_fiq(void)
-{
-	__asm__ __volatile__("msr DAIFSet, %0\n\t" : : "i"(DAIF_FIQ_BIT)  : "memory");
 }
 
 /* SPSR_EL1, Saved Program Status Register (EL1)
