@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "mini_uart.h"
 #include "timer.h"
-#include "irq.h"
 #include "gic_v3.h"
 #include "fork.h"
 #include "sched.h"

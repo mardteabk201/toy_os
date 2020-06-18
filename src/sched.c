@@ -1,5 +1,4 @@
 #include "sched.h"
-#include "irq.h"
 #include "printf.h"
 #include "fork.h"
 #include "utils.h"
