@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #if !defined(_AARCH64_H)
 #define  _AARCH64_H
 
@@ -30,23 +32,13 @@ uint32_t raw_read_current_el(void);
 uint32_t get_current_el(void);
 uint32_t raw_read_daif(void);
 void raw_write_daif(uint32_t daif);
-void enable_debug_exceptions(void);
-void enable_serror_exceptions(void);
-//void enable_irq(void);
-void enable_fiq(void);
-void disable_debug_exceptions(void);
-void disable_serror_exceptions(void);
-//void disable_irq(void);
-void disable_fiq(void);
+void enable_irq(void);
+void disable_irq(void);
 /* SPSR_EL1, Saved Program Status Register (EL1) */
 uint32_t raw_read_spsr_el1(void);
 void raw_write_spsr_el1(uint32_t spsr_el1);
 /* ISR_EL1, Interrupt Status Register */
 uint32_t raw_read_isr_el1(void);
-uint64_t raw_read_rvbar_el1(void);
-void raw_write_rvbar_el1(uint64_t rvbar_el1);
-uint64_t raw_read_vbar_el1(void);
-void raw_write_vbar_el1(uint64_t vbar_el1);
 
 /* CNTV_CTL_EL0, Counter-timer Virtual Timer Control register */
 uint32_t raw_read_cntv_ctl(void);

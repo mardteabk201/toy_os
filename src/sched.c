@@ -4,6 +4,7 @@
 #include "fork.h"
 #include "utils.h"
 #include "mm.h"
+#include "aarch64.h"
 
 static struct task_struct init_task = INIT_TASK;
 struct task_struct *current = &(init_task);

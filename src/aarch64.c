@@ -47,44 +47,20 @@ void raw_write_daif(uint32_t daif)
 	__asm__ __volatile__("msr DAIF, %0\n\t" : : "r"(daif) : "memory");
 }
 
-void enable_debug_exceptions(void)
-{
-	__asm__ __volatile__("msr DAIFClr, %0\n\t" : : "i"(DAIF_DBG_BIT)  : "memory");
-}
-
-void enable_serror_exceptions(void)
-{
-	__asm__ __volatile__("msr DAIFClr, %0\n\t" : : "i"(DAIF_ABT_BIT)  : "memory");
-}
-
-/*
 void enable_irq(void)
 {
 	__asm__ __volatile__("msr DAIFClr, %0\n\t" : : "i"(DAIF_IRQ_BIT)  : "memory");
 }
-*/
 
 void enable_fiq(void)
 {
 	__asm__ __volatile__("msr DAIFClr, %0\n\t" : : "i"(DAIF_FIQ_BIT)  : "memory");
 }
 
-void disable_debug_exceptions(void)
-{
-	__asm__ __volatile__("msr DAIFSet, %0\n\t" : : "i"(DAIF_DBG_BIT)  : "memory");
-}
-
-void disable_serror_exceptions(void)
-{
-	__asm__ __volatile__("msr DAIFSet, %0\n\t" : : "i"(DAIF_ABT_BIT)  : "memory");
-}
-
-/*
 void disable_irq(void)
 {
 	__asm__ __volatile__("msr DAIFSet, %0\n\t" : : "i"(DAIF_IRQ_BIT)  : "memory");
 }
-*/
 
 void disable_fiq(void)
 {
@@ -106,7 +82,6 @@ void raw_write_spsr_el1(uint32_t spsr_el1)
 {
 	__asm__ __volatile__("msr SPSR_EL1, %0\n\t" : : "r"(spsr_el1) : "memory");
 }
-
 
 /*
 ISR_EL1, Interrupt Status Register
@@ -195,6 +170,7 @@ uint32_t raw_read_esr_el1(void)
 	__asm__ __volatile__("mrs %0, ESR_EL1\n\t" : "=r"(x) : : "memory");
 	return x;
 }
+
 /*
 CNTFRQ_EL0, Counter-timer Frequency register
 	Holds the clock frequency of the system counter.
