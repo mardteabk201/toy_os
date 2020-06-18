@@ -3,7 +3,6 @@
 #include "printf.h"
 #include "fork.h"
 #include "entry.h"
-#include "utils.h"
 
 int copy_process(unsigned long clone_flags, unsigned long fn, unsigned long arg)
 {

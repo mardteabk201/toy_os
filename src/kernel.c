@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "printf.h"
-#include "utils.h"
 #include "mini_uart.h"
 #include "timer.h"
 #include "gic_v3.h"

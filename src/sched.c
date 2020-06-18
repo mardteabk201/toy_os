@@ -1,7 +1,6 @@
 #include "sched.h"
 #include "printf.h"
 #include "fork.h"
-#include "utils.h"
 #include "mm.h"
 #include "aarch64.h"
 

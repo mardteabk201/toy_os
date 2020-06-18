@@ -1,6 +1,5 @@
 #include "fork.h"
 #include "printf.h"
-#include "utils.h"
 #include "sched.h"
 #include "mm.h"
 
