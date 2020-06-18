@@ -39,6 +39,10 @@ uint32_t raw_read_spsr_el1(void);
 void raw_write_spsr_el1(uint32_t spsr_el1);
 /* ISR_EL1, Interrupt Status Register */
 uint32_t raw_read_isr_el1(void);
+uint64_t raw_read_rvbar_el1(void);
+void raw_write_rvbar_el1(uint64_t rvbar_el1);
+uint64_t raw_read_vbar_el1(void);
+void raw_write_vbar_el1(uint64_t vbar_el1);
 
 /* CNTV_CTL_EL0, Counter-timer Virtual Timer Control register */
 uint32_t raw_read_cntv_ctl(void);

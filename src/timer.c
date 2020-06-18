@@ -14,7 +14,6 @@ uint32_t cntfrq;
 void get_cnt_freq()
 {
 	cntfrq = raw_read_cntfrq_el0();
-	//printf("cntfrq: %d\n", cntfrq);
 }
 
 void set_next_event()
@@ -22,10 +21,7 @@ void set_next_event()
 	uint64_t current_cnt;
 
 	current_cnt = raw_read_cntvct_el0();
-	//printf("current_cnt: %d\n", current_cnt);
 	raw_write_cntv_cval_el0(current_cnt + cntfrq);
-	//printf("rewrite: %d\n", current_cnt + cntfrq);
-	//printf("read: %d\n", raw_read_cntv_cval_el0());
 }
 
 void timer_init(void)

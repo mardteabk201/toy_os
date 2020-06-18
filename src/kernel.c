@@ -13,12 +13,14 @@
 #include "mm.h"
 #include "aarch64.h"
 
+extern long vectors;
+
 /* 这个函数的实现有点技巧 */
 /* 这个进程刚开始创建时，在ret_from_fork里，sp是0x50000ef0 */
 /* 它知道，自己最终回回到ret_from_fork，并且sp会回到0x50000ef0 */
 /* 所以，pt_regs就是0x50000ef0，然后填充好pt_regs */
 /* 到时候直接执行ret_to_usr里的kernel_exit */
-/* 就可以配置好，sp_el0和esr_el1 */
+/* 就可以配置好，sp_el0和elr_el1 */
 int move_to_user_mode(unsigned long start, unsigned long size, unsigned long pc)
 {
 	struct pt_regs *regs = task_pt_regs(current);
@@ -53,7 +55,7 @@ void kernel_main(void)
 	init_printf(NULL, putc);
 	printf("Hell we come!\n");
 
-	irq_vector_init();
+	raw_write_vbar_el1((uint64_t)&vectors);
 	gic_v3_initialize();
 	timer_init();
 	enable_irq();
