@@ -204,3 +204,16 @@ void raw_write_cntv_cval_el0(uint64_t cntv_cval_el0)
 {
 	__asm__ __volatile__("msr CNTV_CVAL_EL0, %0\n\t" : : "r"(cntv_cval_el0) : "memory");
 }
+
+uint64_t raw_read_ttbr0_el1(void)
+{
+	uint64_t pgd;
+
+	__asm__ __volatile__("mrs %0, TTBR0_EL1\n\t" : "=r"(pgd) : : "memory");
+	return pgd;
+}
+
+void raw_write_ttbr0_el1(uint64_t pgd)
+{
+	__asm__ __volatile__("msr TTBR0_EL1, %0\n\t" : : "r"(pgd) : "memory");
+}

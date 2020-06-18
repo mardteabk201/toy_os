@@ -58,4 +58,7 @@ uint64_t raw_read_cntvct_el0(void);
 uint64_t raw_read_cntv_cval_el0(void);
 void raw_write_cntv_cval_el0(uint64_t cntv_cval_el0);
 
+uint64_t raw_read_ttbr0_el1(void);
+void raw_write_ttbr0_el1(uint64_t pgd);
+
 #endif  /*  _AARCH64_H   */
