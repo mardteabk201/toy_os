@@ -1,8 +1,6 @@
 #ifndef	_MM_H
 #define	_MM_H
 
-#include "peripherals/base.h"
-
 #define VA_START				0xffff000000000000
 
 #define PAGE_SHIFT				12
@@ -43,8 +41,6 @@ unsigned long allocate_user_page(struct task_struct *task, unsigned long va);
 
 extern unsigned long pg_dir;
 extern unsigned long idmap_pg_dir;
-
-#define UART_BASE   0x09000000
 
 #endif
 

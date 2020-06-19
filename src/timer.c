@@ -1,6 +1,5 @@
 #include "sched.h"
 #include "printf.h"
-#include "peripherals/timer.h"
 #include <stdint.h>
 #include "aarch64.h"
 #include "gic_v3.h"

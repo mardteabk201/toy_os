@@ -1,7 +1,6 @@
 #include "printf.h"
 #include "timer.h"
 #include "entry.h"
-#include "peripherals/irq.h"
 #include <stdint.h>
 #include "aarch64.h"
 
