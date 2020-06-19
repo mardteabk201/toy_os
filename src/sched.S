@@ -24,4 +24,3 @@ cpu_switch_to:
 	ldr	x30, [x8] /* lr */
 	mov	sp, x9
 	ret
-

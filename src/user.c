@@ -29,4 +29,3 @@ __attribute__((section(".text.user"))) void user_process()
 	else
 		loop("bbbbb");
 }
-
