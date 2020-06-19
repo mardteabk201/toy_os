@@ -22,14 +22,6 @@ void set_next_event()
 	raw_write_cntv_cval_el0(current_cnt + cntfrq);
 }
 
-void timer_init(void)
-{
-	disable_cntv();
-	get_cnt_freq();
-	set_next_event();
-	enable_cntv();
-}
-
 void timer_next(void)
 {
 	//disable_cntv();
@@ -42,4 +34,12 @@ void handle_timer_irq(void)
 {
 	timer_next();
 	timer_tick();
+}
+
+void timer_init(void)
+{
+	disable_cntv();
+	get_cnt_freq();
+	set_next_event();
+	enable_cntv();
 }
