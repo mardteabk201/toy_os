@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include "board.h"
 #include "exception.h"
 #include "gic_v3.h"
 

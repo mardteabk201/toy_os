@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include "aarch64.h"
 #include "gic_v3.h"
-#include "board.h"
 
 const unsigned int interval = 200000;
 unsigned int curVal = 0;
