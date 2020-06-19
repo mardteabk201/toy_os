@@ -203,7 +203,6 @@ abort:
 	;
 }
 
-
 void init_printf(void* putp, void (*putf)(void*, char))
 {
 	stdout_putf = putf;
@@ -222,8 +221,6 @@ static void putcp(void* p, char c)
 {
 	*(*((char**)p))++ = c;
 }
-
-
 
 void tfp_sprintf(char* s, char *fmt, ...)
 {

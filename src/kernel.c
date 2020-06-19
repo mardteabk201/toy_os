@@ -49,7 +49,7 @@ void temporary_process()
 
 void kernel_main(void)
 {
-	init_printf(NULL, putc);
+	init_printf(NULL, uart_send);
 	printf("Hell we come!\n");
 
 	raw_write_vbar_el1((uint64_t)&vectors);
