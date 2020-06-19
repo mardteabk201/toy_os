@@ -30,7 +30,7 @@ int move_to_user_mode(unsigned long start, unsigned long size, unsigned long pc)
 	unsigned long code_page = allocate_user_page(current, 0);
 
 	memcpy(code_page, start, size);
-	raw_write_ttbr0_el1(current->mm.pgd);
+	set_pgd(current->mm.pgd);
 
 	return 0;
 }

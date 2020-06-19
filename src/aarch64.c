@@ -217,3 +217,11 @@ void raw_write_ttbr0_el1(uint64_t pgd)
 {
 	__asm__ __volatile__("msr TTBR0_EL1, %0\n\t" : : "r"(pgd) : "memory");
 }
+
+void set_pgd(uint64_t pgd)
+{
+	raw_write_ttbr0_el1(pgd);
+	__asm__ __volatile__("tlbi vmalle1is\n\t");
+	__asm__ __volatile__("dsb ish\n\t");
+	__asm__ __volatile__("isb\n\t");
+}

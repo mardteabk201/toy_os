@@ -67,7 +67,7 @@ void switch_to(struct task_struct * next)
 	prev = current;
 	current = next;
 
-	raw_write_ttbr0_el1(next->mm.pgd);
+	set_pgd(next->mm.pgd);
 
 	/* This will be the return entry */
 	cpu_switch_to(prev, next);
