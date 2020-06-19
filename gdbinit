@@ -3,7 +3,7 @@ set confirm off
 add-symbol-file build/kernel8.elf 0x60000000
 set $pc=_start
 
-hb *0x600000c0
+hb *0x60001218
 #hb copy_process
 #hb _schedule
 #hb cpu_switch_to
