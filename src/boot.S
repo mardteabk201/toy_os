@@ -1,5 +1,5 @@
-#include "arm/mmu.h"
-#include "arm/sysregs.h"
+#include "mmu.h"
+#include "sysregs.h"
 #include "mm.h"
 
 .globl _start

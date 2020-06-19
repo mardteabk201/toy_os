@@ -1,6 +1,6 @@
 #include "mm.h"
 #include "printf.h"
-#include "arm/mmu.h"
+#include "mmu.h"
 
 static unsigned short mem_map[PAGING_PAGES] = {0,};
 static long va_pa_offset = VA_START - PA_START;
