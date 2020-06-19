@@ -1,7 +1,7 @@
-#include <stdint.h>
+#ifndef _AARCH64_H
+#define _AARCH64_H
 
-#if !defined(_AARCH64_H)
-#define  _AARCH64_H
+#include <stdint.h>
 
 /* CurrentEL, Current Exception Level */
 #define CURRENT_EL_MASK		0x3

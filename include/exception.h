@@ -1,4 +1,4 @@
-#if !defined(_EXCEPTION_H)
+#ifndef _EXCEPTION_H
 #define _EXCEPTION_H
 
 /* Vector Table
@@ -95,5 +95,7 @@ typedef struct _exception_frame {
 } exception_frame;
 
 void common_trap_handler(exception_frame *_exc);
+
 #endif /* !ASM_FILE */
+
 #endif /* _EXCEPTION_H */

@@ -1,4 +1,4 @@
-#if !defined(_GIC_V3_H)
+#ifndef _GIC_V3_H
 #define _GIC_V3_H
 
 #include "exception.h"
@@ -137,4 +137,5 @@ int gic_v3_find_pending_irq(struct _exception_frame *exc __attribute__((unused))
 void gicd_disable_int(irq_no irq);
 void gicd_enable_int(irq_no irq);
 void gicd_clear_pending(irq_no irq);
+
 #endif  /* _GIC_V3_H */
