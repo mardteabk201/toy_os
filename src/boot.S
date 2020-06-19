@@ -2,8 +2,6 @@
 #include "arm/sysregs.h"
 #include "mm.h"
 
-.text
-
 .globl _start
 _start:
 	mrs	x0, mpidr_el1		

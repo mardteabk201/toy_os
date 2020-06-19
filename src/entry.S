@@ -1,5 +1,3 @@
-.section ".text.hell"
-
 #include "arm/sysregs.h"
 #include "entry.h"
 #include "sys.h"

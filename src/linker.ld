@@ -12,7 +12,6 @@ SECTIONS
 	.data.user : { build/user* (.data) }
 	.bss.user : { build/user* (.bss) }
 	user_end = .;
-	.text.hell : { *(.text.hell) }
 	.rodata : { *(.rodata) }
 	.data : { *(.data) }
 	. = ALIGN(0x8);

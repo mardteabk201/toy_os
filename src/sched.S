@@ -1,7 +1,5 @@
 #include "sched.h"
 
-.section ".text.hell"
-
 .globl cpu_switch_to
 cpu_switch_to:
 	mov	x10, #THREAD_CPU_CONTEXT

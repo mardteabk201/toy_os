@@ -1,5 +1,3 @@
-.section ".text.hell"
-
 .globl memcpy
 memcpy:
 	ldr x3, [x1], #8
